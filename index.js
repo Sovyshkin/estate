@@ -487,3 +487,12 @@ app.get(`/habitation/items`, async function (req, res) {
     res.send({expired: true})
   }
 });
+
+
+app.post(`/create_roles`, async function(req, res) {
+  let user = new Role({value: 'USER'})
+  await user.save()
+  let admin = new Role({value: 'ADMIN'})
+  await admin.save()
+  res.redirect(`back`)
+})
