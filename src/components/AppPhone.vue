@@ -4,13 +4,17 @@ import { RouterLink, RouterView } from 'vue-router';
 export default {
   components: {},
   data() {},
-  methods() {},
+  methods: {
+    async link(){
+      await axios.get(`/create_roles`)
+    }
+  },
   mounted() {},
 };
 </script>
 
 <template>
-  <RouterLink to="emergencyPhone " class="wrapperPhone">Телефоны экстренных служб</RouterLink>
+  <RouterLink @click="link" to="emergencyPhone " class="wrapperPhone">Телефоны экстренных служб</RouterLink>
 </template>
 
 <style scoped>
