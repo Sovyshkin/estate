@@ -1,86 +1,61 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router';
+import axios from 'axios';
 
 export default {
   components: {},
-  data() {},
-  methods() {},
-  mounted() {},
+  data() {
+    return {
+      NEWS: ``,
+      admin: false,
+    };
+  },
+  methods: {
+    async loadNews() {
+      await axios
+        .get(`/news`, {
+          headers: {
+            "Authorization": document.cookie.replace('token=', ``),
+          },
+        })
+        .then((e) => {
+          this.NEWS = e.data.news;
+          this.admin = e.data.admin;
+        });
+    },
+  },
+  mounted() {
+    this.loadNews();
+  },
 };
 </script>
 
 <template>
+  <RouterLink v-if="admin" to="/create-news">Создать новость</RouterLink>
   <div class="wrapperNews">
     <div class="accordion" id="accordionExample">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
+      <div class="accordion-item" v-for="(news, i) in NEWS">
+        <h2 class="accordion-header" :id="'heading' + i">
           <button
             class="accordion-button"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#collapseOne"
+            :data-bs-target="'#collapse' + i"
             aria-expanded="true"
-            aria-controls="collapseOne"
+            :aria-controls="'collapseOne' + i"
           >
-            Новость #1
+            {{ news.title }}
+            <button class="delete">Удалить</button>
           </button>
         </h2>
         <div
-          id="collapseOne"
+          :id="'collapse' + i"
           class="accordion-collapse collapse show"
-          aria-labelledby="headingOne"
+          :aria-labelledby="'heading' + i"
           data-bs-parent="#accordionExample"
         >
           <div class="accordion-body">
-
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseTwo"
-            aria-expanded="false"
-            aria-controls="collapseTwo"
-          >
-            Новость #2
-          </button>
-        </h2>
-        <div
-          id="collapseTwo"
-          class="accordion-collapse collapse"
-          aria-labelledby="headingTwo"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingThree">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseThree"
-            aria-expanded="false"
-            aria-controls="collapseThree"
-          >
-            Новость #3
-          </button>
-        </h2>
-        <div
-          id="collapseThree"
-          class="accordion-collapse collapse"
-          aria-labelledby="headingThree"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-            
+            {{ news.content }}
           </div>
         </div>
       </div>
@@ -89,36 +64,53 @@ export default {
 </template>
 
 <style scoped>
-.wrapperNews{
-  width: 100%;
+.delete{
+  margin-left: 80% ;
+  background: rgba(230, 86, 86, 0.992);
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+}
+a{
+  width: fit-content;
+  padding: 5px 10px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: 1px solid var(--mainColor);
+  color: var(--mainColor);
+}
+.wrapperNews {
+  width: 80%;
   height: 100%;
   overflow-y: scroll;
 }
-.accordion-body{
-color: var(--mainColor);
+.accordion-body {
+  color: var(--mainColor);
 }
 .wrapperNews::-webkit-scrollbar {
   width: 0;
 }
 
-.accordion-item{
+.accordion-item {
   background: transparent;
   border: 1px solid var(--mainColor);
 }
-.accordion-button{
+.accordion-button {
   border: none;
   padding: 10px !important;
   background: transparent;
   color: var(--mainColor);
 }
-.accordion-button:focus{
+.accordion-button:focus {
   box-shadow: none;
   border: none;
 }
-.accordion-button:not(.collapsed)::after{
-  background-image: url("/src/assets/img/arrow-down-sign-to-navigate.png")
+.accordion-button:not(.collapsed)::after {
+  background-image: url('/src/assets/img/arrow-down-sign-to-navigate.png');
 }
-.accordion-button::after{
-  background-image: url("/src/assets/img/arrow-down-sign-to-navigate.png")
+.accordion-button::after {
+  background-image: url('/src/assets/img/arrow-down-sign-to-navigate.png');
 }
 </style>

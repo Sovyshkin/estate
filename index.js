@@ -37,6 +37,20 @@ app.use(express.urlencoded({ extended: true }));
 let mongoose = require(`mongoose`);
 mongoose.connect(`mongodb://127.0.0.1:27017/estate`);
 
+let newsSchema = mongoose.Schema(
+  {
+    title: String,
+    content: String,
+  },
+  {
+    timestamps: {
+      createdAt: true,
+    },
+  }
+);
+
+let News = new mongoose.model(`news`, newsSchema);
+
 let habinationShema = mongoose.Schema({
   title: String,
   img: Array,
@@ -199,9 +213,23 @@ let ADMINVERIFY = function (roles) {
   };
 };
 
-let upload = multer({
-  dest: './uploads/',
+app.get(`/news`, async function (req, res) {
+  let token = req.headers.authorization;
+  let { roles: userRoles } = jwt.verify(token, secret);
+  let admin
+  if (token) {
+    userRoles.forEach((role) => {
+      if (role == 'ADMIN') {
+        admin = true;
+      }
+    });
+  }
+
+  let news = await News.find({});
+
+  res.send({ news, admin });
 });
+
 let timeId;
 app.post(`/upload`, async function (req, res) {
   let { name, id } = req.query;
