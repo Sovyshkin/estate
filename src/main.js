@@ -6,7 +6,7 @@ import router from './router/router'
 
 
 import axios from 'axios';
-axios.defaults.baseURL = 'http://31.172.67.138/';
+axios.defaults.baseURL = 'http://localhost:3005';
 
 const app = createApp(App)
 
