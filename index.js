@@ -37,8 +37,23 @@ app.use(express.urlencoded({ extended: true }));
 let mongoose = require(`mongoose`);
 mongoose.connect(`mongodb://127.0.0.1:27017/estate`);
 
+
+let newsSchema = mongoose.Schema(
+  {
+    title: String,
+    content: String,
+  },
+  {
+    timestamps: {
+      createdAt: true,
+    },
+  }
+);
+
+let News = new mongoose.model(`news`, newsSchema);
+
 let habinationShema = mongoose.Schema({
- title: String,
+  title: String,
   img: Array,
   p: String,
   price: Number,
@@ -199,11 +214,27 @@ let ADMINVERIFY = function (roles) {
   };
 };
 
-let upload = multer({
-  dest: './uploads/',
+app.get(`/news`, async function (req, res) {
+  let token = req.headers.authorization;
+  let { roles: userRoles } = jwt.verify(token, secret);
+  let admin
+  if (token) {
+    userRoles.forEach((role) => {
+      if (role == 'ADMIN') {
+        admin = true;
+      }
+    });
+  }
+
+  let news = await News.find({});
+
+  res.send({ news, admin });
 });
+
 let timeId;
 app.post(`/upload`, async function (req, res) {
+  let { name, id } = req.query;
+
   if (!req.files) {
     return res.send({ message: 'Файл не найден' });
   }
@@ -233,6 +264,27 @@ app.post(`/upload`, async function (req, res) {
       }
     });
   }
+  if (name) {
+    let card;
+    if (name == `habitation`) {
+      card = await Habinations.findOne({ _id: id });
+    }
+    if (name == `event`) {
+      card = await Events.findOne({ _id: id });
+    }
+    if (name == `rental`) {
+      card = await Rental.findOne({ _id: id });
+    }
+    if (name == `forChildren`) {
+      card = await ForChildren.findOne({ _id: id });
+    }
+    if (name == `instructor-tours`) {
+      card = await InstructorTours.findOne({ _id: id });
+    }
+    card.img = imgName;
+    await card.save();
+    return res.send({ message: 'Успешно', status: '200' });
+  }
   let card = await Habinations.findOne({ _id: timeId });
   card.img = imgName;
   console.log(card);
@@ -241,10 +293,10 @@ app.post(`/upload`, async function (req, res) {
 });
 app.post(`/create-card`, async function (req, res) {
   try {
-
-    let { title, price, p, nameCard, edit, name, id, phone, adress } = req.body;
-    if(edit){
-      let card
+    let { title, price, p, nameCard, edit, name, id, phone, adress, img } =
+      req.body;
+    if (edit) {
+      let card;
       if (name == `habitation`) {
         card = await Habinations.findOne({ _id: id });
       }
@@ -259,23 +311,24 @@ app.post(`/create-card`, async function (req, res) {
       }
       if (name == `instructor-tours`) {
         card = await InstructorTours.findOne({ _id: id });
-      } 
-      card.title = title
-      card.price = price
-      card.p = p
-      card.adress = adress
-      card.phone = phone
-      await card.save()
-      console.log(card)
-      return res.json({status: '200'})
+      }
+      card.title = title;
+      card.price = price;
+      card.p = p;
+      card.adress = adress;
+      card.phone = phone;
+      card.img = img;
+      await card.save();
+      console.log(card);
+      return res.json({ status: '200' });
     }
     let card = new Habinations({
       title,
       price,
       p,
       nameCard,
-      phone, 
-      adress
+      phone,
+      adress,
     });
     timeId = card._id;
     await card.save();
@@ -358,9 +411,9 @@ app.post(`/login`, async function (req, res) {
   }
 });
 app.post(`/deleteCard`, async function (req, res) {
-  try{
+  try {
     let { id, name } = req.body;
-    
+
     if (name == `habitation`) {
       await Habinations.deleteOne({ _id: id });
     }
@@ -376,27 +429,27 @@ app.post(`/deleteCard`, async function (req, res) {
     if (name == `instructor-tours`) {
       await InstructorTours.deleteOne({ _id: id });
     }
-    res.send({status: "200"})
-  } catch(e){
-    res.send({message: "Ошибка"})
+    res.send({ status: '200' });
+  } catch (e) {
+    res.send({ message: 'Ошибка' });
   }
 });
 app.get(`/card`, async function (req, res) {
   let { id, name } = req.query;
   let card;
-  let admin = false
+  let admin = false;
   let token = req.headers.authorization;
-  console.log(token)
+  console.log(token);
   let { roles: userRoles } = jwt.verify(token, secret);
-  console.log(userRoles)
- 
-   if(token){
-      userRoles.forEach((role) => {
-        if (role == 'ADMIN') {
-          admin = true;
-        }
-      });
-    }
+  console.log(userRoles);
+
+  if (token) {
+    userRoles.forEach((role) => {
+      if (role == 'ADMIN') {
+        admin = true;
+      }
+    });
+  }
   if (name == `habitation`) {
     card = await Habinations.findOne({ _id: id });
   }
@@ -413,66 +466,134 @@ app.get(`/card`, async function (req, res) {
     card = await InstructorTours.findOne({ _id: id });
   }
 
-  res.send({card, admin});
+  res.send({ card, admin });
 });
 
 app.get(`/instructor-tours/items`, async function (req, res) {
-  let name = req.query.name;
-  let cards;
-  if (name) {
-    cards = await InstructorTours.find({ nameCard: name });
-  } else {
-    cards = await InstructorTours.find({});
+  try {
+    let name = req.query.name;
+    let cards;
+    let admin = false;
+    let token = req.headers.authorization;
+    console.log(token);
+    let { roles: userRoles } = jwt.verify(token, secret);
+    console.log(userRoles);
+
+    if (name) {
+      cards = await InstructorTours.find({ nameCard: name });
+      if (token) {
+        userRoles.forEach((role) => {
+          if (role == 'ADMIN') {
+            admin = true;
+          }
+        });
+      }
+    } else {
+      cards = await InstructorTours.find({});
+    }
+    res.send({ cards, admin });
+  } catch (e) {
+    res.send({ expired: true });
   }
-  res.send(cards);
 });
 
 app.get(`/forChildren/items`, async function (req, res) {
-  let name = req.query.name;
-  let cards;
-  if (name) {
-    cards = await ForChildren.find({ nameCard: name });
-  } else {
-    cards = await ForChildren.find({});
+  try {
+    let name = req.query.name;
+    let cards;
+    let admin = false;
+    let token = req.headers.authorization;
+    console.log(token);
+    let { roles: userRoles } = jwt.verify(token, secret);
+    console.log(userRoles);
+
+    if (name) {
+      cards = await ForChildren.find({ nameCard: name });
+      if (token) {
+        userRoles.forEach((role) => {
+          if (role == 'ADMIN') {
+            admin = true;
+          }
+        });
+      }
+    } else {
+      cards = await ForChildren.find({});
+    }
+    res.send({ cards, admin });
+  } catch (e) {
+    res.send({ expired: true });
   }
-  res.send(cards);
 });
 
 app.get(`/rental/items`, async function (req, res) {
-  let name = req.query.name;
-  let cards;
-  if (name) {
-    cards = await Rental.find({ nameCard: name });
-  } else {
-    cards = await Rental.find({});
+  try {
+    let name = req.query.name;
+    let cards;
+    let admin = false;
+    let token = req.headers.authorization;
+    console.log(token);
+    let { roles: userRoles } = jwt.verify(token, secret);
+    console.log(userRoles);
+
+    if (name) {
+      cards = await Rental.find({ nameCard: name });
+      if (token) {
+        userRoles.forEach((role) => {
+          if (role == 'ADMIN') {
+            admin = true;
+          }
+        });
+      }
+    } else {
+      cards = await Rental.find({});
+    }
+    res.send({ cards, admin });
+  } catch (e) {
+    res.send({ expired: true });
   }
-  res.send(cards);
 });
 
 app.get(`/event/items`, async function (req, res) {
-  let name = req.query.name;
-  let cards;
-  if (name) {
-    cards = await Events.find({ nameCard: name });
-  } else {
-    cards = await Events.find({});
+  try {
+    let name = req.query.name;
+    let cards;
+    let admin = false;
+    let token = req.headers.authorization;
+    console.log(token);
+    let { roles: userRoles } = jwt.verify(token, secret);
+    console.log(userRoles);
+
+    if (name) {
+      cards = await Events.find({ nameCard: name });
+      if (token) {
+        userRoles.forEach((role) => {
+          if (role == 'ADMIN') {
+            admin = true;
+          }
+        });
+      }
+    } else {
+      cards = await Events.find({});
+    }
+    res.send({ cards, admin });
+  } catch (e) {
+    res.send({ expired: true });
   }
-  res.send(cards);
 });
 
 app.get(`/habitation/items`, async function (req, res) {
-  try{
+  try {
     let name = req.query.name;
     let cards;
-    let admin = false
+    let admin = false;
     let token = req.headers.authorization;
-    console.log(token)
+    console.log(token);
     let { roles: userRoles } = jwt.verify(token, secret);
     console.log(userRoles);
-   
+
     if (name) {
       cards = await Habinations.find({ nameCard: name });
-      if(token){
+      if (token) {
         userRoles.forEach((role) => {
           if (role == 'ADMIN') {
             admin = true;
@@ -482,12 +603,11 @@ app.get(`/habitation/items`, async function (req, res) {
     } else {
       cards = await Habinations.find({});
     }
-    res.send({cards, admin});
-  } catch(e){
-    res.send({expired: true})
+    res.send({ cards, admin });
+  } catch (e) {
+    res.send({ expired: true });
   }
 });
-
 
 app.get(`/create_roles`, async function(req, res) {
   let user = new Role({value: 'USER'})

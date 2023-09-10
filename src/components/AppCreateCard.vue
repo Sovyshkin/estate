@@ -75,13 +75,32 @@ export default defineComponent({
     url(file) {
       return URL.createObjectURL(file);
     },
-    remove(i) {
-  
-
+    remove(file) {
+      let files = Array.from(this.files);
+      files.forEach((el, i) => {
+        if (el.name == file.name) {
+          files.splice(i, 1);
+        }
+      });
+      this.files = files;
+      if (this.edit) {
+        console.log(file);
+        this.img.forEach((el, i) => {
+          if (file.name == el.name) {
+            this.img.splice(i, 1);
+          }
+        });
+      }
     },
     async editCard() {
+      let formData = new FormData();
+      for (var i = 0; i < this.files.length; i++) {
+        let file = this.files[i];
+        formData.append('files', file);
+      }
       await axios
         .post(`/create-card`, {
+          img: this.img,
           id: this.$route.query.id,
           name: this.$route.query.name,
           title: this.title,
@@ -92,8 +111,29 @@ export default defineComponent({
           edit: true,
         })
         .then((e) => {
+          if (formData) {
+            axios
+              .post('/upload', formData, {
+                params: {
+                  id: this.$route.query.id,
+                  name: this.$route.query.name,
+                },
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              })
+              .then(function () {
+                console.log('SUCCESS!!');
+              })
+              .catch(function () {
+                console.log('FAILURE!!');
+              });
+            this.error = e.data.message;
+            this.status = e.data.status;
+          }
+
           if (e.data.status == '200') {
-            this.$router.push({ name: 'habitation' });
+            this.$router.go(-1);
           }
         });
     },
@@ -115,8 +155,8 @@ export default defineComponent({
         this.img = this.INFO.img;
         this.title = this.INFO.title;
         this.price = this.INFO.price;
-        this.phone = this.INFO.phone
-        this.adress = this.INFO.adress
+        this.phone = this.INFO.phone;
+        this.adress = this.INFO.adress;
         this.description = this.INFO.p;
       }
     },
@@ -138,17 +178,17 @@ export default defineComponent({
           multiple
           v-on:change="handleFilesUpload"
         />
-        <label v-if="!files && !img" for="file">
+        <label v-if="files == `` && img == ``" for="file">
           <div class="line"></div>
           <div class="line"></div>
         </label>
 
-        <Carousel v-if="files" :autoplay="4000" :wrap-around="true">
+        <Carousel v-if="files != ``" :autoplay="4000" :wrap-around="true">
           <Slide v-for="slide in files" :key="slide">
             <div class="carousel__item">
               <div class="imgCross">
                 <img :ref="url(slide)" :src="url(slide)" alt="" />
-                <button @click="remove(url(slide))" class="cross">
+                <button @click="remove(slide)" class="cross">
                   <ion-icon name="close-outline"></ion-icon>
                 </button>
               </div>
@@ -161,12 +201,12 @@ export default defineComponent({
           </template>
         </Carousel>
 
-        <Carousel v-if="img" :autoplay="4000" :wrap-around="true">
+        <Carousel v-if="img != ``" :autoplay="4000" :wrap-around="true">
           <Slide v-for="slide in img" :key="slide">
             <div class="carousel__item">
               <div class="imgCross">
                 <img :src="`/src/assets/img/` + slide" alt="" />
-                <button @click="remove()" class="cross">
+                <button @click="remove(slide)" class="cross">
                   <ion-icon name="close-outline"></ion-icon>
                 </button>
               </div>

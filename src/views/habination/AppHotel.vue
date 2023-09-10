@@ -36,26 +36,46 @@ export default {
       if (this.$route.path == `/event/items`) {
         let events = await axios.get(`/event/items`, {
           params: { name: this.$route.query.name },
+          headers: {
+            Authorization: document.cookie.replace('token=', ``),
+          },
         });
-        this.INFO = events.data;
+        this.INFO = events.data.cards;
+        this.admin = events.data.admin;
+        this.expired = events.data.expired;
       }
       if (this.$route.path == `/rental/items`) {
         let rental = await axios.get(`/rental/items`, {
           params: { name: this.$route.query.name },
+          headers: {
+            Authorization: document.cookie.replace('token=', ``),
+          },
         });
-        this.INFO = rental.data;
+        this.INFO = rental.data.cards;
+        this.admin = rental.data.admin;
+        this.expired = rental.data.expired;
       }
       if (this.$route.path == `/forChildren/items`) {
         let forChildren = await axios.get(`/forChildren/items`, {
           params: { name: this.$route.query.name },
+          headers: {
+            Authorization: document.cookie.replace('token=', ``),
+          },
         });
-        this.INFO = forChildren.data;
+        this.INFO = forChildren.data.cards;
+        this.admin = forChildren.data.admin;
+        this.expired = forChildren.data.expired;
       }
       if (this.$route.path == `/instructor-tours/items`) {
         let InstructorTours = await axios.get(`/instructor-tours/items`, {
           params: { name: this.$route.query.name },
+          headers: {
+            Authorization: document.cookie.replace('token=', ``),
+          },
         });
-        this.INFO = InstructorTours.data;
+        this.INFO = InstructorTours.data.cards;
+        this.admin = InstructorTours.data.admin;
+        this.expired = InstructorTours.data.expired;
       }
     },
     open(id) {
