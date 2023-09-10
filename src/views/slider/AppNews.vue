@@ -1,13 +1,5 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router';
-<<<<<<< HEAD
-
-export default {
-  components: {},
-  data() {},
-  methods() {},
-  mounted() {},
-=======
 import axios from 'axios';
 
 export default {
@@ -35,92 +27,19 @@ export default {
   mounted() {
     this.loadNews();
   },
->>>>>>> future
 };
 </script>
 
 <template>
-<<<<<<< HEAD
-  <div class="wrapperNews">
-    <div class="accordion" id="accordionExample">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-=======
   <RouterLink v-if="admin" to="/create-news">Создать новость</RouterLink>
   <div class="wrapperNews">
     <div class="accordion" id="accordionExample">
       <div class="accordion-item" v-for="(news, i) in NEWS">
         <h2 class="accordion-header" :id="'heading' + i">
->>>>>>> future
           <button
             class="accordion-button"
             type="button"
             data-bs-toggle="collapse"
-<<<<<<< HEAD
-            data-bs-target="#collapseOne"
-            aria-expanded="true"
-            aria-controls="collapseOne"
-          >
-            Новость #1
-          </button>
-        </h2>
-        <div
-          id="collapseOne"
-          class="accordion-collapse collapse show"
-          aria-labelledby="headingOne"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseTwo"
-            aria-expanded="false"
-            aria-controls="collapseTwo"
-          >
-            Новость #2
-          </button>
-        </h2>
-        <div
-          id="collapseTwo"
-          class="accordion-collapse collapse"
-          aria-labelledby="headingTwo"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingThree">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseThree"
-            aria-expanded="false"
-            aria-controls="collapseThree"
-          >
-            Новость #3
-          </button>
-        </h2>
-        <div
-          id="collapseThree"
-          class="accordion-collapse collapse"
-          aria-labelledby="headingThree"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-            
-=======
             :data-bs-target="'#collapse' + i"
             aria-expanded="true"
             :aria-controls="'collapseOne' + i"
@@ -137,7 +56,6 @@ export default {
         >
           <div class="accordion-body">
             {{ news.content }}
->>>>>>> future
           </div>
         </div>
       </div>
@@ -146,15 +64,7 @@ export default {
 </template>
 
 <style scoped>
-<<<<<<< HEAD
-.wrapperNews{
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-}
-.accordion-body{
-color: var(--mainColor);
-=======
+
 .delete{
   margin-left: 80% ;
   background: rgba(230, 86, 86, 0.992);
@@ -179,41 +89,22 @@ a{
 }
 .accordion-body {
   color: var(--mainColor);
->>>>>>> future
 }
 .wrapperNews::-webkit-scrollbar {
   width: 0;
 }
 
-<<<<<<< HEAD
-.accordion-item{
-  background: transparent;
-  border: 1px solid var(--mainColor);
-}
-.accordion-button{
-=======
+
 .accordion-item {
   background: transparent;
   border: 1px solid var(--mainColor);
 }
 .accordion-button {
->>>>>>> future
   border: none;
   padding: 10px !important;
   background: transparent;
   color: var(--mainColor);
 }
-<<<<<<< HEAD
-.accordion-button:focus{
-  box-shadow: none;
-  border: none;
-}
-.accordion-button:not(.collapsed)::after{
-  background-image: url("/src/assets/img/arrow-down-sign-to-navigate.png")
-}
-.accordion-button::after{
-  background-image: url("/src/assets/img/arrow-down-sign-to-navigate.png")
-=======
 .accordion-button:focus {
   box-shadow: none;
   border: none;
@@ -223,6 +114,5 @@ a{
 }
 .accordion-button::after {
   background-image: url('/src/assets/img/arrow-down-sign-to-navigate.png');
->>>>>>> future
 }
 </style>

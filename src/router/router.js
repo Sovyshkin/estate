@@ -21,10 +21,7 @@ import AppTaxiDelivery from '../views/center/AppTaxiDelivery.vue'
 import AppHotel from '../views/habination/AppHotel.vue'
 import AppCardOpen from '../components/AppCardOpen.vue'
 import AppCreateCard from '../components/AppCreateCard.vue'
-<<<<<<< HEAD
-=======
 import AppCreateNews from '../components/AppCreateNews.vue'
->>>>>>> future
 
 
 const router = createRouter({
@@ -155,14 +152,11 @@ const router = createRouter({
       name: 'createCard',
       component: AppCreateCard,
     },
-<<<<<<< HEAD
-=======
     {
       path: '/create-news',
       name: 'createNews',
       component: AppCreateNews,
     },
->>>>>>> future
   ]
 })
 
