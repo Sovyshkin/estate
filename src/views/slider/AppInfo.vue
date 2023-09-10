@@ -120,6 +120,10 @@ export default {
     box-shadow: 0px 0 10px 0 #ffffff71;
     border-radius: 15px;
   }
+
+  .vadim {
+    
+  }
 }
 
 @media (max-width: 507px) {
