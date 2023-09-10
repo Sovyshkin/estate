@@ -112,7 +112,7 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100px;
-    font-size: medium;
+    font-size: small;
     font-weight: 550;
     padding: 7px 10px;
     color: #d5d5d5;
