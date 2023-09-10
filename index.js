@@ -35,7 +35,7 @@ app.use(fileUpload());
 app.use(express.urlencoded({ extended: true }));
 
 let mongoose = require(`mongoose`);
-mongoose.connect(`mongodb://31.172.67.138:80/estate`);
+mongoose.connect(`mongodb://127.0.0.1:27017/estate`);
 
 let habinationShema = mongoose.Schema({
  title: String,
