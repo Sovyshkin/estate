@@ -14,7 +14,7 @@ app.listen(port, function () {
 });
 
 let cors = require('cors');
-app.use(cors({ origin: 'http://31.172.67.138/' }));
+app.use(cors({ origin: 'http://localhost:5173' }));
 
 // Подключаем middleware для сессий
 app.use(
