@@ -1,6 +1,7 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router';
 import axios from 'axios';
+import Editor from '@tinymce/tinymce-vue';
 
 export default {
   components: {},
