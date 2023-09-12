@@ -7,14 +7,14 @@ const jwt = require('jsonwebtoken');
 const fileUpload = require('express-fileupload');
 const { secret } = require(`./config`);
 
-let port = 3005;
+let port = parseInt(process.env.PORT || '3005');
 
 app.listen(port, function () {
   console.log(`http://localhost:${port}`);
 });
 
 let cors = require('cors');
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: 'http://sneg-info.ru' }));
 
 // Подключаем middleware для сессий
 app.use(
