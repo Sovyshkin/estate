@@ -14,7 +14,7 @@ app.listen(port, function () {
 });
 
 let cors = require('cors');
-app.use(cors( {origin: `http://sneg-info.ru`}));
+app.use(cors( {origin: `http://sneg-info.ru:80`}));
 
 // Подключаем middleware для сессий
 app.use(
