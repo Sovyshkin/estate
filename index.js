@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const fileUpload = require('express-fileupload');
 const { secret } = require(`./config`);
 
-let port = 80;
+let port = 3000;
 
 app.listen(port, function () {
   console.log(`http://localhost:${port}`);
