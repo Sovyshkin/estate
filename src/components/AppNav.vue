@@ -31,22 +31,22 @@ export default {
     </button>
     <nav>
       <ul class="list-nav" :class="{'active': this.active == 1}">
-        <RouterLink to="/">
+        <RouterLink to="/" @click="active = 0">
           <li class="list-item-nav"><img src="../assets/img/logo.png" /></li
         ></RouterLink>
-        <RouterLink to="/weather">
+        <RouterLink to="/weather" @click="active = 0">
           <li class="list-item-nav">Погода</li></RouterLink
         >
-        <RouterLink to="/book_a_seat">
+        <RouterLink to="/book_a_seat" @click="active = 0">
           <li class="list-item-nav">Забронировать место</li></RouterLink
         >
-        <RouterLink to="/book_a_transfer">
+        <RouterLink to="/book_a_transfer" @click="active = 0">
           <li class="list-item-nav">Забронировать трансфер</li></RouterLink
         >
-        <RouterLink to="/search">
+        <RouterLink to="/search" @click="active = 0">
           <li class="list-item-nav">Поиск</li></RouterLink
         >
-        <RouterLink to="/register">
+        <RouterLink to="/register" @click="active = 0">
           <li class="list-item-nav">Регистрация/Вход</li></RouterLink
         >
       </ul>

@@ -24,15 +24,15 @@ export default {
     <div :class="{'active': this.trigger == '1'}" class="wrapper-for-slider">
     <nav>
         <ul class="list-nav">
-            <RouterLink to="/info"><li class="list-item-nav">ИНФО</li></RouterLink>
-            <RouterLink to="/transfer-taksi"><li class="list-item-nav">Трансфер/Такси</li></RouterLink>
-            <RouterLink to="/habitation"><li class="list-item-nav">Проживание</li></RouterLink>
-            <RouterLink to="/rental"><li class="list-item-nav">Прокат</li></RouterLink>
-            <RouterLink to="/event"><li class="list-item-nav">Развлечения</li></RouterLink>
-            <RouterLink to="/forChildren"><li class="list-item-nav">Детям</li></RouterLink>
-            <RouterLink to="/instructor-tours"><li class="list-item-nav">Инструктор/Туры</li></RouterLink>
-            <RouterLink to="/news"><li class="list-item-nav">Новости</li></RouterLink>
-            <RouterLink to="/ads"><li class="list-item-nav">Объявления</li></RouterLink>
+            <RouterLink to="/info" @click="trigger = 0"><li class="list-item-nav">ИНФО</li></RouterLink>
+            <RouterLink to="/transfer-taksi" @click="trigger = 0"><li class="list-item-nav">Трансфер/Такси</li></RouterLink>
+            <RouterLink to="/habitation" @click="trigger = 0"><li class="list-item-nav">Проживание</li></RouterLink>
+            <RouterLink to="/rental" @click="trigger = 0"><li class="list-item-nav">Прокат</li></RouterLink>
+            <RouterLink to="/event" @click="trigger = 0"><li class="list-item-nav">Развлечения</li></RouterLink>
+            <RouterLink to="/forChildren" @click="trigger = 0"><li class="list-item-nav">Детям</li></RouterLink>
+            <RouterLink to="/instructor-tours" @click="trigger = 0"><li class="list-item-nav">Инструктор/Туры</li></RouterLink>
+            <RouterLink to="/news" @click="trigger = 0"><li class="list-item-nav">Новости</li></RouterLink>
+            <RouterLink to="/ads" @click="trigger = 0"><li class="list-item-nav">Объявления</li></RouterLink>
         </ul>
     </nav>
     </div>

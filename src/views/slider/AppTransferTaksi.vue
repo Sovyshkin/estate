@@ -79,6 +79,20 @@ a{
   border-radius: 15px;
 }
 
+@media (max-width: 995px) {
+  .item-event {
+    line-height: 1;
+    font-size: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    background-color: transparent;
+    flex-basis: 47%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 @media (max-width: 670px) {
   .event {
     text-align: center;
@@ -87,7 +101,7 @@ a{
     justify-content: center;
     align-items: center;
     height: 100px;
-    font-size: medium;
+    font-size: 13px;
     font-weight: 550;
     padding: 7px 10px;
     color: #d5d5d5;
