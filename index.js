@@ -14,7 +14,7 @@ app.listen(port, function () {
 });
 
 let cors = require('cors');
-app.use(cors( {origin: `http://sneg-info.ru`}));
+app.use(cors());
 
 // Подключаем middleware для сессий
 app.use(
@@ -25,12 +25,13 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://sneg-info.ru')
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  next()
-})
+app.use((_req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+
+  next();
+});
+
 
 
 // Раздача статики
