@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     async loadWeather() {
-      await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${!this.find? "Москва" : this.find }&lang=ru&units=metric&appid=309ce2e3109b0cdf1a61910a9719cee0`)
+      await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${!this.find? "Шерегеш" : this.find }&lang=ru&units=metric&appid=309ce2e3109b0cdf1a61910a9719cee0`)
       .then(res => {this.weather = res.data.main.temp; this.alerts = res.data.weather[0].description; this.icon = res.data.weather[0].icon; console.log(res)})
     },
   },
@@ -33,12 +33,12 @@ export default {
         @keyup.enter="loadWeather"
         v-model="find"
         type="text"
-        placeholder="Москва"
+        placeholder="Шерегеш"
       />
       <button @click="loadWeather" type="submit">Поиск</button>
     </div>
     <div class="card">
-      <span class="city">{{ !find?"Москва" : find }}</span>
+      <span class="city">{{ !find?"Шерегеш" : find }}</span>
       <div class="icon">
         <img :src="`https://openweathermap.org/img/wn/`+icon+`@2x.png`" alt="" />
       </div>
