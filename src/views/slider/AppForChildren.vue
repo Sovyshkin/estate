@@ -91,7 +91,7 @@ export default {
 @media (max-width: 995px) {
     .item-event {
         line-height: 1;
-        font-size: 8px;
+        font-size: 13px;
         cursor: pointer;
         margin-bottom: 10px;
         background-color: transparent;
