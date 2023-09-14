@@ -6,7 +6,7 @@ import router from './router/router'
 
 
 import axios from 'axios';
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = 'http://sneg-info:80';
 
 const app = createApp(App)
 
