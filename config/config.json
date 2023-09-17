@@ -1,0 +1,19 @@
+{
+  "production": {
+    "dialect": "sqlite",
+    "storage": "data.sqlite3"
+  },
+"development": {
+    "dialect": "sqlite",
+    "storage": "data.sqlite3"
+  },
+"local": {
+    "dialect": "sqlite",
+    "storage": "data.sqlite3"
+  },
+"test": {
+    "dialect": "sqlite",
+    "storage": "data.sqlite3"
+  }
+    
+}

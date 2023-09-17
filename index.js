@@ -6,8 +6,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fileUpload = require('express-fileupload');
 const { secret } = require(`./config`);
+const { Sequelize } = require('sequelize')
 
-let port = 3000;
+let port = process.env.PORT || 3000
 
 app.listen(port, function () {
   console.log(`http://localhost:${port}`);
@@ -43,11 +44,21 @@ app.use(fileUpload());
 // Настройка POST-запроса
 app.use(express.urlencoded({ extended: true }));
 
+const sequelize = new Sequelize(`sqlite::memory:`)
+connect = async ()=>{
+  try {
+    await sequelize.authenticate()
+    console.log('Соединение с БД было успешно установлено')
+  } catch (e) {
+    console.log('Невозможно выполнить подключение к БД: ', e)
+  }
+}
+connect()
 let mongoose = require(`mongoose`);
 mongoose.connect(`mongodb://127.0.0.1:27017/estate`);
 
 
-let newsSchema = mongoose.Schema(
+let newsSchema = sequelize.define("newsSchema",
   {
     title: String,
     content: String,
@@ -59,9 +70,8 @@ let newsSchema = mongoose.Schema(
   }
 );
 
-let News = new mongoose.model(`news`, newsSchema);
 
-let habinationShema = mongoose.Schema({
+let habinationShema = sequelize.define( "habinationShema", {
   title: String,
   img: Array,
   p: String,
@@ -70,9 +80,10 @@ let habinationShema = mongoose.Schema({
   adress: String,
   nameCard: String,
 });
-let Habinations = new mongoose.model(`habitation`, habinationShema);
+// let Habinations = new mongoose.model(`habitation`, habinationShema);
+console.log(habinationShema === sequelize.models.habinationShema)
 
-let eventsShema = mongoose.Schema({
+let eventsShema = sequelize.define("eventsShema",{
  title: String,
   img: Array,
   p: String,
@@ -81,9 +92,8 @@ let eventsShema = mongoose.Schema({
   adress: String,
   nameCard: String,
 });
-let Events = new mongoose.model(`event`, eventsShema);
 
-let rentalShema = mongoose.Schema({
+let rentalShema = sequelize.define("rentalShema",{
  title: String,
   img: Array,
   p: String,
@@ -92,9 +102,8 @@ let rentalShema = mongoose.Schema({
   adress: String,
   nameCard: String,
 });
-let Rental = new mongoose.model(`rental`, rentalShema);
 
-let forChildrenShema = mongoose.Schema({
+let forChildrenShema = sequelize.define("forChildrenShema",{
  title: String,
   img: Array,
   p: String,
@@ -103,9 +112,8 @@ let forChildrenShema = mongoose.Schema({
   adress: String,
   nameCard: String,
 });
-let ForChildren = new mongoose.model(`forChildren`, forChildrenShema);
 
-let instructorToursShema = mongoose.Schema({
+let instructorToursShema = sequelize.define("instructorToursShema",{
   title: String,
   img: Array,
   p: String,
@@ -114,20 +122,16 @@ let instructorToursShema = mongoose.Schema({
   adress: String,
   nameCard: String,
 });
-let InstructorTours = new mongoose.model(
-  `instructorTour`,
-  instructorToursShema
-);
-let RoleShema = mongoose.Schema({
+
+let RoleShema = sequelize.define("RoleShema",{
   value: {
     type: String,
     unique: true,
     default: 'USER',
   },
 });
-let Role = new mongoose.model(`role`, RoleShema);
 
-let UserShema = mongoose.Schema({
+let UserShema = sequelize.define("UserShema",{
   username: {
     type: String,
     required: true,
@@ -158,7 +162,6 @@ let UserShema = mongoose.Schema({
     },
   ],
 });
-let User = new mongoose.model(`user`, UserShema);
 
 let generateAccessToken = (id, roles) => {
   let payload = {
